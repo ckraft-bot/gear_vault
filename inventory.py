@@ -1,6 +1,7 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+import pandas as pd
 import psycopg2
 import streamlit as st
 from datetime import datetime
@@ -13,10 +14,26 @@ connection_str = utility.connection_str  # Dev connection
 conn = psycopg2.connect(connection_str)  
 cursor = conn.cursor()
 
-# Function to load data from table
+# Ensure the sequence for ID exists and set it as the default for the "ID" column
+cursor.execute("""
+    CREATE SEQUENCE IF NOT EXISTS gear_vault_schema.equipment_id_seq START 1;
+""")
+
+cursor.execute("""
+    ALTER TABLE gear_vault_schema.equipment
+    ALTER COLUMN "ID" SET DEFAULT nextval('gear_vault_schema.equipment_id_seq');
+""")
+conn.commit()
+
+# Function to load data from table, ordered by purchase date in ascending order
 def load_equipment():
-    cursor.execute('SELECT "ID", "CATEGORY", "NAME", "BRAND", "MODEL", "STORE", "SIZE", "UNIT", "PURCHASE_DATE", "NOTES" FROM gear_vault_schema.equipment')
+    cursor.execute('''
+        SELECT "ID", "CATEGORY", "NAME", "BRAND", "MODEL", "STORE", "SIZE", "UNIT", "PURCHASE_DATE", "NOTES" 
+        FROM gear_vault_schema.equipment
+        ORDER BY "PURCHASE_DATE" ASC
+    ''')
     return cursor.fetchall()
+
 
 # Function to insert data into table
 def insert_equipment(data):
@@ -25,15 +42,48 @@ def insert_equipment(data):
     ("CATEGORY", "NAME", "BRAND", "MODEL", "STORE", "SIZE", "UNIT", "PURCHASE_DATE", "NOTES") 
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
-    cursor.execute(query, data)  # Include CATEGORY in the tuple
+    cursor.execute(query, data)  # Do not include ID in the data
     conn.commit()
 
 # Streamlit UI
-st.title("Gear Vault Equipment Manager")
+st.title("Gear Vault")
+
+# Sidebar content using markdown
+st.sidebar.markdown("""
+### 1. **Protection**
+- **Belay Devices**: Devices used by climbers to manage rope slack and catch falls.
+- **Carabiners**: Metal loops with spring-loaded gates used for securing ropes and equipment.
+- **Climbing Harness**: Worn by climbers for safety and attachment to ropes.
+- **Climbing Protection (Nuts, Cams)**: Devices placed in cracks in the rock to protect the climber in case of a fall.
+- **Climbing Ropes**: Strong, durable ropes used to secure climbers to anchors, belay devices, or other climbers for safety during ascents and descents.
+- **Crash Pads**: Portable pads used for bouldering to protect against falls.
+- **Helmets**: Worn to protect the head from falling rocks or bumps.
+- **Quickdraws**: A pair of carabiners connected by a sewn sling used to connect rope to anchors.
+- **Rope Protectors**: Prevent rope wear when climbing on abrasive surfaces.
+
+### 2. **Footwear**
+- **Approach Shoes**: Versatile shoes used for hiking to a climbing site or on easy climbing terrain.
+- **Climbing Boots**: High-ankle boots designed for mountaineering or ice climbing.
+- **Climbing Shoes**: Shoes designed with rubber soles for optimal grip while climbing.
+
+### 3. **Bags**
+- **Chalk Bag**: A small bag for holding chalk, typically worn on a climber's harness.
+- **Climbing Backpack**: A backpack designed to carry climbing gear.
+- **Climbing Duffel Bag**: A spacious bag for carrying all climbing equipment for travel or storage.
+- **Hydration Packs**: Small, wearable water storage bags used for hydration during climbs.
+- **Rope Bag**: Used to store and carry climbing ropes to keep them clean and untangled.
+
+### 4. **Nutrition**
+- **Electrolyte Tablets**: Used to replenish essential minerals lost during intense activity.
+- **Energy Bars**: High-calorie, portable food items to maintain energy during climbs.
+- **Hydration Packs**: Water and nutrient-filled packs to stay hydrated and energized.
+- **Protein Powder**: For muscle recovery after a strenuous climb.
+- **Trail Mix**: A mix of nuts, seeds, and dried fruits providing quick energy.
+""")
 
 # Form to add new equipment
 with st.form(key="add_equipment"):
-    category = st.selectbox("Category", ["Gear", "Protection", "Footwear", "Bags", "Nutrition"])
+    category = st.selectbox("Category", ["Protection", "Footwear", "Bags", "Nutrition", "Certification"])
     name = st.text_input("Name")
     brand = st.text_input("Brand")
     model = st.text_input("Model")
@@ -58,10 +108,14 @@ with st.form(key="add_equipment"):
 if st.button("Load Equipment"):
     equipment = load_equipment()
     if equipment:
+        # Convert the list of tuples to a DataFrame
+        columns = ["ID", "CATEGORY", "NAME", "BRAND", "MODEL", "STORE", "SIZE", "UNIT", "PURCHASE_DATE", "NOTES"]
+        df = pd.DataFrame(equipment, columns=columns)  # Create the DataFrame with column names
         st.write("### Current Equipment:")
-        st.dataframe(equipment, hide_index=True)
+        st.dataframe(df, hide_index=True)  # Display the DataFrame in Streamlit
     else:
         st.write("No equipment found.")
+
 
 # Close connection on app exit
 if conn:
