@@ -6,8 +6,10 @@ import streamlit as st
 import random
 from datetime import datetime
 import pytz  
+import utility
 
-connection_str = st.secrets["postgres"]["connection_str"]
+# connection_str = st.secrets["postgres"]["connection_str"] # prod
+connection_str = utility.connection_str # dev
 
 # Connect to NeonDB PostgreSQL
 conn = psycopg2.connect(connection_str)  
