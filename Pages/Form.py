@@ -25,16 +25,6 @@ cursor.execute("""
 """)
 conn.commit()
 
-# Function to load data from table, ordered by purchase date in ascending order
-def load_equipment():
-    cursor.execute('''
-        SELECT "ID", "CATEGORY", "NAME", "BRAND", "MODEL", "STORE", "SIZE", "UNIT", "PURCHASE_DATE", "NOTES" 
-        FROM gear_vault_schema.equipment
-        ORDER BY "PURCHASE_DATE" ASC
-    ''')
-    return cursor.fetchall()
-
-
 # Function to insert data into table
 def insert_equipment(data):
     query = """
@@ -104,17 +94,8 @@ with st.form(key="add_equipment"):
             except Exception as e:
                 st.error(f"Failed to add equipment: {e}")
 
-# Display existing equipment in a table
-if st.button("Load Equipment"):
-    equipment = load_equipment()
-    if equipment:
-        # Convert the list of tuples to a DataFrame
-        columns = ["ID", "CATEGORY", "NAME", "BRAND", "MODEL", "STORE", "SIZE", "UNIT", "PURCHASE_DATE", "NOTES"]
-        df = pd.DataFrame(equipment, columns=columns)  # Create the DataFrame with column names
-        st.write("### Current Equipment:")
-        st.dataframe(df, hide_index=True)  # Display the DataFrame in Streamlit
-    else:
-        st.write("No equipment found.")
+if st.button(":house: Go Home"):
+    st.switch_page("Home.py")
 
 
 # Close connection on app exit
