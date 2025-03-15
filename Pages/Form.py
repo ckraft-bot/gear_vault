@@ -38,6 +38,8 @@ def insert_equipment(data):
 # Streamlit UI
 st.title("Gear Vault")
 
+utility.set_background("Assets/background_blur.png")
+
 # Sidebar content using markdown
 st.sidebar.markdown("""
 ### 1. **Protection**

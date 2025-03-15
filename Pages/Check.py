@@ -34,6 +34,8 @@ def load_equipment():
     ''')
     return cursor.fetchall()
 
+utility.set_background("Assets/background_blur.png")
+
 # Display existing equipment in a table
 if st.button("Load Equipment"):
     equipment = load_equipment()
