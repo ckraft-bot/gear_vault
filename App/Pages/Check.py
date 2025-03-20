@@ -48,7 +48,7 @@ if st.button("Load Equipment"):
         st.write("No equipment found.")
 
 if st.button(":house: Go Home"):
-    st.switch_page("home.py")
+    st.switch_page("App/Pages/Home.py")
     
 # Close connection on app exit
 if conn:

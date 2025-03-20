@@ -96,7 +96,7 @@ with st.form(key="add_equipment"):
                 st.error(f"Failed to add equipment: {e}")
 
 if st.button(":house: Go Home"):
-    st.switch_page("home.py")
+    st.switch_page("App/Pages/Home.py")
 
 
 # Close connection on app exit
