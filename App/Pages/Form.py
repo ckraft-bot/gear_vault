@@ -8,8 +8,8 @@ from datetime import datetime
 import utility
 
 # Connection settings
-# connection_str = utility.connection_str  # Dev connection
-connection_str = st.secrets["postgres"]["connection_str"]  # Prod connection
+connection_str = utility.connection_str  # Dev connection
+# connection_str = st.secrets["postgres"]["connection_str"]  # Prod connection
 
 # Connect to NeonDB PostgreSQL
 conn = psycopg2.connect(connection_str)  
@@ -96,7 +96,7 @@ with st.form(key="add_equipment"):
                 st.error(f"Failed to add equipment: {e}")
 
 if st.button(":house: Go Home"):
-    st.switch_page("App/Pages/Home.py")
+    st.switch_page("Home.py")
 
 
 # Close connection on app exit
