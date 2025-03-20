@@ -9,8 +9,7 @@ from datetime import datetime
 
 # Connection settings
 # connection_str = utility.connection_str  # Dev connection
-
-# connection_str = st.secrets["postgres"]["connection_str"]  # Prod connection
+connection_str = st.secrets["postgres"]["connection_str"]  # Prod connection
 
 # Connect to NeonDB PostgreSQL
 conn = psycopg2.connect(connection_str)  
