@@ -22,11 +22,11 @@ col1, col2 = st.columns(2)
 with col1:
     # Button to navigate to the Form page
     if st.button(":heavy_plus_sign: Add Equipment"):
-        st.set_page_config(page_title="Form")
-        st.switch_page("Form")  # Page name, no file path or extension
+        # st.set_page_config(page_title="Form")
+        st.switch_page("Pages/Form.py")  
 
 with col2:
     # Button to navigate to the Check page
     if st.button(":mag: Check Equipment"):
-        st.set_page_config(page_title="Check")
-        st.switch_page("Check")  # Page name, no file path or extension
+        # st.set_page_config(page_title="Check")
+        st.switch_page("Pages/Check.py") 

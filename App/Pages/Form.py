@@ -5,10 +5,11 @@ import pandas as pd
 import psycopg2
 import streamlit as st
 from datetime import datetime
-import utility
+# import utility
 
 # Connection settings
-connection_str = utility.connection_str  # Dev connection
+# connection_str = utility.connection_str  # Dev connection
+
 # connection_str = st.secrets["postgres"]["connection_str"]  # Prod connection
 
 # Connect to NeonDB PostgreSQL
