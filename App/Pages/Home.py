@@ -20,8 +20,8 @@ col1, col2 = st.columns(2)
 
 with col1:
     if st.button(":heavy_plus_sign: Add Equipment"):
-        st.switch_page("pages/form.py")
+        st.switch_page("App/Pages/Form.py")
 
 with col2:
     if st.button(":mag: Check Equipment"):
-        st.switch_page("pages/check.py")
+        st.switch_page("App/Pages/Check.py")
