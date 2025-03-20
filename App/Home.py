@@ -15,13 +15,18 @@ st.write(
     "Whether you're a beginner or a seasoned climber, Gear Vault helps you climb with confidence and peace of mind!"
 )
 
-# Buttons for navigation
+
+# Create two columns for navigation buttons
 col1, col2 = st.columns(2)
 
 with col1:
+    # Button to navigate to the Form page
     if st.button(":heavy_plus_sign: Add Equipment"):
-        st.switch_page("App/Pages/Form.py")
+        # st.set_page_config(page_title="Form")
+        st.switch_page("Pages/Form.py")  
 
 with col2:
+    # Button to navigate to the Check page
     if st.button(":mag: Check Equipment"):
-        st.switch_page("App/Pages/Check.py")
+        # st.set_page_config(page_title="Check")
+        st.switch_page("Pages/Check.py") 

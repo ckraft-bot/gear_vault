@@ -5,11 +5,12 @@ import pandas as pd
 import psycopg2
 import streamlit as st
 from datetime import datetime
-import utility
+# import utility
 
 # Connection settings
 # connection_str = utility.connection_str  # Dev connection
-connection_str = st.secrets["postgres"]["connection_str"]  # Prod connection
+
+# connection_str = st.secrets["postgres"]["connection_str"]  # Prod connection
 
 # Connect to NeonDB PostgreSQL
 conn = psycopg2.connect(connection_str)  
@@ -48,7 +49,7 @@ if st.button("Load Equipment"):
         st.write("No equipment found.")
 
 if st.button(":house: Go Home"):
-    st.switch_page("App/Pages/Home.py")
+    st.switch_page("Home.py")
     
 # Close connection on app exit
 if conn:
